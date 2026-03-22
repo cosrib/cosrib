@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sync": "git add . && git commit -m \"Auto save\" && git push",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
