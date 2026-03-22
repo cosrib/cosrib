@@ -41,12 +41,27 @@ export function DashboardHome({ onGoTo }: Props) {
         value: kpi.outreachDieseWoche,
         hint: "Diese Woche",
         icon: Mail,
-        onClick: () => onGoTo("outreach")
+        onClick: () => onGoTo("outreach"),
       },
       {
         id: "followups",
         label: "Follow-ups",
         value: kpi.followUpsOffen,
-      }
-    ]
+        hint: "Offen",
+        icon: Reply,
+        onClick: () => onGoTo("followups"),
+      },
+      {
+        id: "kunden",
+        label: "Kunden",
+        value: kpi.kundenAusEmail,
+        hint: "Als Kunde gewonnen",
+        icon: UserCheck,
+        onClick: () => onGoTo("kontakte"),
+      },
+    ] as const;
+
+    return (
+        <div
+    )
 }
