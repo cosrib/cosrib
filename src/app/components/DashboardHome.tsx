@@ -87,7 +87,9 @@ export function DashboardHome({ onGoTo }: Props) {
                               onClick={s.onClick}
                               className="text-left rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:border-primary/40 hover:shadow-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                             >
-                                <div className="flex items-start justify-between gap.2"
+                                <div className="flex items-start justify-between gap.2 mb-3">
+                                    
+                                </div>
                             </button>
                         )
                     })}
