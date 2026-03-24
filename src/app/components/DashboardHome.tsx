@@ -1,30 +1,75 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card } from "./Card";
 import { Button } from "./Button";
-import { 
+import {
     Users,
     Mail,
     Reply,
     UserCheck,
     ArrowRight,
     Inbox,
-}   from "lucide-react";
+} from "lucide-react";
+import {
+    countContacts,
+    countDraftsInLastDays,
+    countDraftsByType,
+    loadDrafts,
+    type Draft,
+} from "@/lib/scribeLocalStorage";
 
 type Props = {
     onGoTo: (id: string) => void;
 };
 
-/**Platzhalter-später aus Supabase laden */
+/** Fallback vor dem ersten Client-Render */
 export const DASHBOARD_STATS_PLACEHOLDER = {
     kontakte: 0,
     outreachDieseWoche: 0,
     followUpsOffen: 0,
     kundenAusEmail: 0,
-}   as const;
+} as const;
+
+const typeLabel: Record<Draft["type"], string> = {
+    "kalt-email": "Kalt-Email",
+    "follow-up": "Follow-up",
+    antwort: "Antwort",
+};
 
 export function DashboardHome({ onGoTo }: Props) {
-    const kpi = DASHBOARD_STATS_PLACEHOLDER;
+    const [kpi, setKpi] = useState<{
+        kontakte: number;
+        outreachDieseWoche: number;
+        followUpsOffen: number;
+        kundenAusEmail: number;
+    }>({
+        kontakte: DASHBOARD_STATS_PLACEHOLDER.kontakte,
+        outreachDieseWoche: DASHBOARD_STATS_PLACEHOLDER.outreachDieseWoche,
+        followUpsOffen: DASHBOARD_STATS_PLACEHOLDER.followUpsOffen,
+        kundenAusEmail: DASHBOARD_STATS_PLACEHOLDER.kundenAusEmail,
+    });
+    const [recent, setRecent] = useState<Draft[]>([]);
+
+    useEffect(() => {
+        queueMicrotask(() => {
+            try {
+                setKpi({
+                    kontakte: countContacts(),
+                    outreachDieseWoche: countDraftsInLastDays("kalt-email", 7),
+                    followUpsOffen: countDraftsByType("follow-up"),
+                    kundenAusEmail: DASHBOARD_STATS_PLACEHOLDER.kundenAusEmail,
+                });
+                const sorted = [...loadDrafts()].sort(
+                    (a, b) =>
+                        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+                );
+                setRecent(sorted.slice(0, 5));
+            } catch (e) {
+                console.error("DashboardHome KPI laden", e);
+            }
+        });
+    }, []);
 
     const stats = [
       {
@@ -68,8 +113,8 @@ export function DashboardHome({ onGoTo }: Props) {
                   Übersicht
                 </h1>
                 <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
-                    Wichtigste Zahlen auf einen Blick. Die Werte werden verbunden, sobald
-                    Kontakte und E-Mails in Scribe gespeichert sind.
+                    Wichtigste Zahlen aus deinen lokal gespeicherten Daten. Später mit Supabase
+                    synchron.
                 </p>
             </div>
 
@@ -158,22 +203,53 @@ export function DashboardHome({ onGoTo }: Props) {
               <h2 id="recent-heading" className="text-lg font-semibold mb-2">
                 Letzte Aktivitäten
               </h2>
-              <Card className="border-dashed bg-secondary/20">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4 py-2">
-                  <div className="rounded-lg bg-card p-3 border border-border shrink-0 self-start">
-                    <Inbox className="w-6 h-6 text-muted-foreground" aria-hidden />
+              {recent.length === 0 ? (
+                <Card className="border-dashed bg-secondary/20">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 py-2">
+                    <div className="rounded-lg bg-card p-3 border border-border shrink-0 self-start">
+                      <Inbox className="w-6 h-6 text-muted-foreground" aria-hidden />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground">Noch keine Entwürfe</p>
+                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                        Speichere eine Kalt-Email, ein Follow-up oder eine Antwort – dann erscheint es hier.
+                      </p>
+                    </div>
+                    <Button type="button" variant="secondary" className="shrink-0 w-full sm:w-auto" onClick={() => onGoTo("verlauf")}>
+                      Zum Verlauf
+                    </Button>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground">Noch keine Einträge</p>
-                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-                      Sobald du E-Mails und Kontakte speicherst, werden hier Aktivitäten angezeigt.
-                    </p>
-                  </div>
-                  <Button type="button" variant="secondary" className="shrink-0 w-full sm:w-auto" onClick={() => onGoTo("verlauf")}>
-                    Zum Verlauf
+                </Card>
+              ) : (
+                <ul className="space-y-2">
+                  {recent.map((d) => (
+                    <li key={d.id}>
+                      <Card className="py-3 px-4 sm:py-4 sm:px-5">
+                        <div className="flex flex-wrap items-center gap-2 justify-between">
+                          <span className="text-xs font-medium uppercase text-accent-foreground bg-accent px-2 py-0.5 rounded">
+                            {typeLabel[d.type]}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(d.updatedAt).toLocaleString("de-DE", {
+                              dateStyle: "short",
+                              timeStyle: "short",
+                            })}
+                          </span>
+                        </div>
+                        <p className="font-medium text-foreground mt-2 truncate">{d.subject}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{d.body}</p>
+                      </Card>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {recent.length > 0 && (
+                <div className="mt-3">
+                  <Button type="button" variant="secondary" onClick={() => onGoTo("verlauf")}>
+                    Alle im Verlauf
                   </Button>
                 </div>
-              </Card>
+              )}
             </section>
         </div>
     );

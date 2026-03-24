@@ -10,6 +10,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // verschachteltes altes Projekt / generierte Artefakte
+    "outreach-ai/**",
+    "JAVA SCRIPT/**",
   ]),
 ]);
 

@@ -18,9 +18,9 @@
 | **„Anmelden“ auf Landing** | Teilweise | Wechselt nur zur **Dashboard-Ansicht** in der App, **kein** Link zu `/auth` |
 | **„Abmelden“ im Dashboard** | Nur UI | Ruft **kein** `supabase.auth.signOut()` auf |
 | **E-Mail in Sidebar** | Platzhalter | Fest `freelancer@example.de` – echte User-Mail aus Session |
-| **Dashboard: Home** | UI fertig (Shopify-Stil) | KPIs = Platzhalter `DASHBOARD_STATS_PLACEHOLDER` in `DashboardHome.tsx` |
-| **Dashboard: Profil, Schreibstil, Kontakte, …** | Platzhalter | Text „Dieser Bereich wird bald verfügbar sein“ |
-| **Kalt-Email / Follow-up / Antwort / Verlauf** | Nicht gebaut | Keine Seiten, keine Logik, kein AI-Text |
+| **Dashboard: Home** | Fertig (lokal) | KPIs + „Letzte Aktivitäten“ aus **localStorage** (`scribeLocalStorage`) |
+| **Dashboard: Profil, Schreibstil, Kontakte** | UI + Speichern (lokal) | Komponenten in `src/app/components/sections/` |
+| **Kalt-Email / Follow-up / Antwort / Verlauf** | UI + Entwürfe (lokal) | Kein KI-Text; Verlauf = gespeicherte Entwürfe |
 | **API-Routen (`/api/...`)** | Keine | — |
 | **KI/LLM für E-Mail-Text** | Nicht angebunden | Kein OpenAI o.ä. |
 | **Vanilla-Version (`HTML/`, `CSS/`)** | Alt / parallel | Nicht mit Next synchronisiert |
@@ -34,7 +34,7 @@
 2. **Warteliste:** SQL-Tabelle + Insert aus LandingPage.
 3. **Landing:** „Anmelden“ → Link zu **`/auth`** (oder eingeloggt → Dashboard).
 4. **Dashboard:** echte Session + Abmelden + E-Mail aus User.
-5. **Erstes Tool** (z. B. Kalt-Email) mit echter UI + Speicherung.
+5. ~~**Erstes Tool**~~ – Kalt-Email & Co. haben UI + **localStorage**; nächster Schritt: **Supabase-Tabellen** + Sync.
 6. Optional: **KI** später.
 
 ---
@@ -45,6 +45,8 @@
 |-------|-----|
 | Startseite | `src/app/page.tsx` → `ScribeApp` |
 | Warteliste | `src/app/components/LandingPage.tsx` |
-| Dashboard | `src/app/components/Dashboard.tsx` |
+| Dashboard | `src/app/components/Dashboard.tsx`, `DashboardSectionContent.tsx` |
+| Lokale Daten (Entwürfe, Kontakte, Profil) | `src/lib/scribeLocalStorage.ts` |
+| Bereichs-UI | `src/app/components/sections/*.tsx` |
 | Auth | `src/app/auth/page.tsx` |
 | Supabase | `src/lib/supabase.ts`, `.env.local` |

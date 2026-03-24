@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { SidebarItem } from "./SidebarItem";
 import { Button } from "./Button";
-import { Card } from "./Card";
 import { DashboardHome } from "./DashboardHome";
+import { DashboardSectionContent } from "./DashboardSectionContent";
 import {
   Home,
   User,
@@ -17,7 +17,6 @@ import {
   MessageSquare,
   Menu,
   X,
-  Construction,
 } from "lucide-react";
 
 type View = "landing" | "dashboard";
@@ -167,34 +166,10 @@ export function Dashboard({
             )}
 
             {activeSection !== "home" && (
-              <Card className="max-w-lg mx-auto text-center py-10 sm:py-12 px-6">
-                <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center mx-auto mb-5 text-accent-foreground">
-                  <Construction className="w-7 h-7" aria-hidden />
-                </div>
-                <h3 className="mb-2 text-xl font-semibold">
-                  {navigationItems.find((item) => item.id === activeSection)?.label}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                  Dieser Bereich wird als Nächstes gebaut. Du kannst schon die Struktur der App testen.
-                </p>
-                <ul className="text-left text-sm text-muted-foreground space-y-2 mb-8 max-w-sm mx-auto">
-                  <li className="flex gap-2">
-                    <span className="text-accent-foreground font-medium">·</span>
-                    Eingaben & Speichern
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-accent-foreground font-medium">·</span>
-                    Anbindung an deinen Schreibstil
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-accent-foreground font-medium">·</span>
-                    Verlauf & Export (später)
-                  </li>
-                </ul>
-                <Button type="button" variant="secondary" onClick={() => setActiveSection("home")}>
-                  Zurück zum Home
-                </Button>
-              </Card>
+              <DashboardSectionContent
+                sectionId={activeSection}
+                onBackHome={() => setActiveSection("home")}
+              />
             )}
           </div>
         </div>
