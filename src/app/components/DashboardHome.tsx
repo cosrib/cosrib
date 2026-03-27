@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card } from "./Card";
 import { Button } from "./Button";
+import { DashboardShopifyChart } from "./DashboardShopifyChart";
 import {
     Users,
     Mail,
@@ -16,7 +17,9 @@ import {
     countDraftsInLastDays,
     countDraftsByType,
     loadDrafts,
+    getDraftActivityLast7Days,
     type Draft,
+    type DraftType,
 } from "@/lib/scribeLocalStorage";
 
 type Props = {
@@ -50,6 +53,14 @@ export function DashboardHome({ onGoTo }: Props) {
         kundenAusEmail: DASHBOARD_STATS_PLACEHOLDER.kundenAusEmail,
     });
     const [recent, setRecent] = useState<Draft[]>([]);
+    const [draftsByType, setDraftsByType] = useState<Record<DraftType, number>>({
+        "kalt-email": 0,
+        "follow-up": 0,
+        antwort: 0,
+    });
+    const [activitySeries, setActivitySeries] = useState<
+        ReturnType<typeof getDraftActivityLast7Days>
+    >([]);
 
     useEffect(() => {
         queueMicrotask(() => {
@@ -60,6 +71,12 @@ export function DashboardHome({ onGoTo }: Props) {
                     followUpsOffen: countDraftsByType("follow-up"),
                     kundenAusEmail: DASHBOARD_STATS_PLACEHOLDER.kundenAusEmail,
                 });
+                setDraftsByType({
+                    "kalt-email": countDraftsByType("kalt-email"),
+                    "follow-up": countDraftsByType("follow-up"),
+                    antwort: countDraftsByType("antwort"),
+                });
+                setActivitySeries(getDraftActivityLast7Days());
                 const sorted = [...loadDrafts()].sort(
                     (a, b) =>
                         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
@@ -84,7 +101,7 @@ export function DashboardHome({ onGoTo }: Props) {
         id: "outreach",
         label: "Outreach",
         value: kpi.outreachDieseWoche,
-        hint: "Diese Woche",
+        hint: "Kalt-Email (7 Tage)",
         icon: Mail,
         onClick: () => onGoTo("kalt-email"),
       },
@@ -92,7 +109,7 @@ export function DashboardHome({ onGoTo }: Props) {
         id: "followups",
         label: "Follow-ups",
         value: kpi.followUpsOffen,
-        hint: "Offen",
+        hint: "Gespeichert",
         icon: Reply,
         onClick: () => onGoTo("follow-up"),
       },
@@ -100,11 +117,23 @@ export function DashboardHome({ onGoTo }: Props) {
         id: "kunden",
         label: "Kunden",
         value: kpi.kundenAusEmail,
-        hint: "Als Kunde gewonnen",
+        hint: "Noch Platzhalter",
         icon: UserCheck,
         onClick: () => onGoTo("kontakte"),
       },
     ] as const;
+
+    const draftStripRows: { type: DraftType; label: string; onClick: () => void }[] = [
+      { type: "kalt-email", label: "Kalt-Email", onClick: () => onGoTo("kalt-email") },
+      { type: "follow-up", label: "Follow-up", onClick: () => onGoTo("follow-up") },
+      { type: "antwort", label: "Antwort", onClick: () => onGoTo("antwort") },
+    ];
+    const maxDraftType = Math.max(
+      1,
+      draftsByType["kalt-email"],
+      draftsByType["follow-up"],
+      draftsByType.antwort
+    );
 
     return (
         <div className="space-y-10 max-w-6xl mx-auto">
@@ -113,41 +142,77 @@ export function DashboardHome({ onGoTo }: Props) {
                   Übersicht
                 </h1>
                 <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
-                    Wichtigste Zahlen aus deinen lokal gespeicherten Daten. Später mit Supabase
-                    synchron.
+                    Übersicht im Stil von Shopify Analytics: Kennzahlen in Karten, Verlauf als
+                    Flächendiagramm – Daten lokal, später Supabase.
                 </p>
             </div>
 
-            <section aria-labelledby="kpi-heading">
-                <h2 id="kpi-heading" className="sr-only">
-                    Kennzahlen
+            <section aria-labelledby="kpi-heading" className="space-y-6">
+                <h2 id="kpi-heading" className="text-lg font-semibold">
+                  Kennzahlen
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
-                    {stats.map((s) => {
-                        const Icon = s.icon;
-                        return (
-                            <button
-                              key={s.id}
-                              type="button"
-                              onClick={s.onClick}
-                              className="text-left rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:border-primary/40 hover:shadow-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                            >
-                                <div className="flex items-start justify-between gap-2 mb-3">
-                                  <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                    {s.label}
-                                  </span>
-                                  <span className="rounded-lg bg-accent p-2 text-accent-foreground shrink-0">
-                                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden />
-                                  </span>
-                                </div>
-                                <p className="text-3xl sm:text-4xl font-semibold tabular-nums tracking-tight text-foreground">
-                                  {s.value}
-                                </p>
-                                <p className="text-xs sm:text-sm text-muted-foreground mt-1">{s.hint}</p>
-                            </button>
-                        );
-                    })}
+
+                <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+                  {stats.map((s) => {
+                    const Icon = s.icon;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={s.onClick}
+                        className="text-left rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="text-xs font-medium text-muted-foreground">
+                            {s.label}
+                          </span>
+                          <span className="rounded-md bg-secondary p-1.5 text-foreground">
+                            <Icon className="w-4 h-4" aria-hidden />
+                          </span>
+                        </div>
+                        <p className="text-2xl sm:text-3xl font-semibold tabular-nums tracking-tight text-foreground">
+                          {s.value}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2 leading-snug">{s.hint}</p>
+                      </button>
+                    );
+                  })}
                 </div>
+
+                <DashboardShopifyChart series={activitySeries} />
+
+                <Card className="p-5 sm:p-6 border-border/80 shadow-sm">
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-4">
+                    Aufteilung nach Typ
+                  </h3>
+                  <div className="space-y-3.5" role="list">
+                    {draftStripRows.map((row) => {
+                      const n = draftsByType[row.type];
+                      const widthPct =
+                        n === 0 ? 0 : Math.max(5, (n / maxDraftType) * 100);
+                      return (
+                        <button
+                          key={row.type}
+                          type="button"
+                          onClick={row.onClick}
+                          className="block w-full text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                          role="listitem"
+                        >
+                          <div className="flex items-center justify-between gap-3 mb-1.5">
+                            <span className="text-sm font-medium text-foreground">{row.label}</span>
+                            <span className="text-sm tabular-nums text-muted-foreground">{n}</span>
+                          </div>
+                          <div className="h-2 w-full rounded-sm bg-secondary overflow-hidden">
+                            <div
+                              className="h-full rounded-sm bg-foreground/25 transition-[width] duration-300 ease-out"
+                              style={{ width: `${widthPct}%` }}
+                            />
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </Card>
             </section>
 
             <section aria-labelledby="quick-heading">

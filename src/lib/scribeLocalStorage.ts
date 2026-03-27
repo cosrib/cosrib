@@ -194,3 +194,39 @@ export function countDraftsInLastDays(type: DraftType, days: number): number {
 export function countContacts(): number {
   return loadContacts().length;
 }
+
+/** Ein Punkt pro Kalendertag (letzte 7 Tage), Zählung nach `updatedAt` der Entwürfe. */
+export type DraftDayActivity = {
+  dateKey: string;
+  labelShort: string;
+  count: number;
+};
+
+export function getDraftActivityLast7Days(): DraftDayActivity[] {
+  if (typeof window === "undefined") {
+    return [];
+  }
+  const drafts = loadDrafts();
+  const result: DraftDayActivity[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - i);
+    const start = d.getTime();
+    const end = start + 24 * 60 * 60 * 1000;
+    const count = drafts.filter((dr) => {
+      const t = new Date(dr.updatedAt).getTime();
+      return t >= start && t < end;
+    }).length;
+    const labelShort = d.toLocaleDateString("de-DE", {
+      weekday: "short",
+      day: "numeric",
+    });
+    result.push({
+      dateKey: d.toISOString().slice(0, 10),
+      labelShort,
+      count,
+    });
+  }
+  return result;
+}
