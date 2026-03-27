@@ -142,8 +142,6 @@ export function DashboardHome({ onGoTo }: Props) {
                   Übersicht
                 </h1>
                 <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
-                    Übersicht im Stil von Shopify Analytics: Kennzahlen in Karten, Verlauf als
-                    Flächendiagramm – Daten lokal, später Supabase.
                 </p>
             </div>
 
