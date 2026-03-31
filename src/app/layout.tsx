@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Scribe",
+  title: "Coscribe",
   description:
     "E-Mails schreiben, die ankommen – Outreach und Follow-ups für Freelancer.",
 };

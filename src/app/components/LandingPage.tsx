@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { Card } from "./Card";
@@ -65,7 +66,7 @@ export function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
             <Mail className="w-6 h-6 text-primary shrink-0" aria-hidden />
-            <span className="text-xl font-semibold tracking-tight">Scribe</span>
+            <span className="text-xl font-semibold tracking-tight">Coscribe</span>
           </div>
           <Button
             variant="primary"
@@ -90,7 +91,7 @@ export function LandingPage() {
             <br className="hidden sm:block" /> die ankommen
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed text-pretty">
-            Scribe hilft Freelancern, professionelle E-Mails für Outreach und
+            Coscribe hilft Freelancern, professionelle E-Mails für Outreach und
             Follow-ups zu verfassen. Klar, persönlich und effektiv.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -98,15 +99,12 @@ export function LandingPage() {
               Auf die Warteliste
               <ArrowRight className="w-4 h-4" aria-hidden />
             </Button>
-            <Button
-              variant="secondary"
-              size="lg"
-              type="button"
-              onClick={() => document.getElementById("scribe-features")?.scrollIntoView({ behavior: "smooth" })}
-              className="w-full sm:w-auto"
+            <Link
+              href="/blog"
+              className="inline-flex items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-secondary text-secondary-foreground hover:bg-[#f0f0f0] border border-border px-6 py-3 w-full sm:w-auto text-center font-medium"
             >
               Mehr erfahren
-            </Button>
+            </Link>
           </div>
         </section>
 
@@ -148,14 +146,10 @@ export function LandingPage() {
 
       <footer className="border-t border-border mt-auto">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <span>© {new Date().getFullYear()} Scribe</span>
-          <button
-            type="button"
-            onClick={() => document.getElementById("scribe-features")?.scrollIntoView({ behavior: "smooth" })}
-            className="hover:text-foreground transition-colors"
-          >
-            Funktionen
-          </button>
+          <span>© {new Date().getFullYear()} Coscribe</span>
+          <Link href="/blog" className="hover:text-foreground transition-colors">
+            Produkt &amp; Features
+          </Link>
         </div>
       </footer>
 
@@ -187,7 +181,7 @@ export function LandingPage() {
                     </button>
                   </div>
                   <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
-                    Wir informieren dich, sobald Scribe verfügbar ist.
+                    Wir informieren dich, sobald Coscribe verfügbar ist.
                   </p>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <Input

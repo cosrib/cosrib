@@ -169,7 +169,7 @@ export function Dashboard({
         <div className="p-5 border-b border-sidebar-border">
           <div className="flex items-center gap-2">
             <Mail className="w-6 h-6 text-primary shrink-0" aria-hidden />
-            <span className="text-xl font-semibold tracking-tight">Scribe</span>
+            <span className="text-xl font-semibold tracking-tight">Coscribe</span>
           </div>
         </div>
 
@@ -210,7 +210,7 @@ export function Dashboard({
             <div className="p-5 border-b border-sidebar-border flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 min-w-0">
                 <Mail className="w-6 h-6 text-primary shrink-0" aria-hidden />
-                <span className="text-xl font-semibold truncate">Scribe</span>
+                <span className="text-xl font-semibold truncate">Coscribe</span>
               </div>
               <button
                 type="button"
@@ -262,7 +262,7 @@ export function Dashboard({
             <Menu className="w-6 h-6" aria-hidden />
           </button>
           <h2 className="capitalize font-semibold text-lg truncate flex-1 text-center md:text-left md:flex-none">
-            {flatNavItems.find((item) => item.id === activeSection)?.label || "Scribe"}
+            {flatNavItems.find((item) => item.id === activeSection)?.label || "Coscribe"}
           </h2>
           <div className="w-10 md:w-0 shrink-0" aria-hidden />
         </header>

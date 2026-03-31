@@ -6,7 +6,7 @@
 
 ## Zweck
 
-Der Ordner **`project  md`** (bei dir oft **zwei Leerzeichen** zwischen „project“ und „md“; im Worktree manchmal ein Leerzeichen) ist die **Doku- und Kontext-Schicht** für FreelancerOS / Scribe.  
+Der Ordner **`project  md`** (bei dir oft **zwei Leerzeichen** zwischen „project“ und „md“; im Worktree manchmal ein Leerzeichen) ist die **Doku- und Kontext-Schicht** für FreelancerOS / Coscribe.  
 Agenten lesen hier **vor** größeren Schritten; bei wichtigen Änderungen wird der Ordner **kurz mitgepflegt**.
 
 ## Vor Arbeit lesen (Priorität)
@@ -30,3 +30,11 @@ Zusätzlich: **`PROJECT-STATUS.md`** im **Repo-Root**, falls vorhanden.
 ## Cursor Rule
 
 Technische Verpflichtung: **`.cursor/rules/project-md-context.mdc`** (`alwaysApply: true`).
+
+---
+
+## Keine automatischen Repo-Edits
+
+Der Assistent **ändert das Repo nicht**, **außer** du sagst ausdrücklich z. B. „mach du“, „implementieren“, „speichern im Repo“. Sonst **nur Chat** – du kopierst selbst.
+
+Regel-Datei: **`.cursor/rules/keine-auto-edits.mdc`** (`alwaysApply: true`).

@@ -65,7 +65,7 @@ export default function AuthPage() {
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-foreground hover:opacity-80 transition-opacity">
             <Mail className="w-6 h-6 text-primary" aria-hidden />
-            <span className="font-semibold">Scribe</span>
+            <span className="font-semibold">Coscribe</span>
           </Link>
         </div>
       </header>
@@ -76,7 +76,7 @@ export default function AuthPage() {
             {istLogin ? "Willkommen zurück" : "Konto erstellen"}
           </h1>
           <p className="text-center text-sm text-muted-foreground mb-8">
-            {istLogin ? "Melde dich mit E-Mail und Passwort an." : "Registriere dich für Scribe."}
+            {istLogin ? "Melde dich mit E-Mail und Passwort an." : "Registriere dich für Coscribe."}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">

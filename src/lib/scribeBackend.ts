@@ -1,5 +1,5 @@
 /**
- * Zentrale Backend-Schicht für Scribe (Supabase).
+ * Zentrale Backend-Schicht für Coscribe (Supabase).
  *
  * Ablauf für den späteren AI-Agent (Konzept):
  * 1. research  → source_content / Rohkontext (Job-Typ `research`)

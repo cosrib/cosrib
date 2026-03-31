@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 /**
- * Platzhalter für die spätere „Scribe Engine“ (Research / Extract / Generate).
+ * Platzhalter für die spätere „Coscribe Engine“ (Research / Extract / Generate).
  * Body: { leadId: string, step: "research" | "extract" | "generate" }
  *
  * Als Nächstes: Session prüfen, Job anlegen, KI aufrufen, Lead + Job aktualisieren.

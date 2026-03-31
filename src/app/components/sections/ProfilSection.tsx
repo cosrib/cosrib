@@ -58,7 +58,7 @@ export function ProfilSection() {
             label="Firma / Brand (optional)"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            placeholder="z. B. Scribe Freelancing"
+            placeholder="z. B. Coscribe Freelancing"
           />
           {error && (
             <p className="text-sm text-destructive" role="alert">

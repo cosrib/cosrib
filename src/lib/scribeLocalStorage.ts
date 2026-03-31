@@ -1,5 +1,5 @@
 /**
- * Lokale Daten für Scribe (Browser localStorage).
+ * Lokale Daten für Coscribe (Browser localStorage).
  * Später durch Supabase ersetzbar – gleiche Konzepte: Entwürfe, Kontakte, Profil.
  */
 

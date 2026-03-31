@@ -1,4 +1,4 @@
-# FreelancerOS / Scribe – Index (`project  md`)
+# FreelancerOS / Coscribe – Index (`project  md`)
 
 Du bist im Ordner **`project  md`** (Name: `project` + **zwei** Leerzeichen + `md`). Hier liegt die **Projekt-Doku** für Mensch und KI.
 

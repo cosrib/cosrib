@@ -1,4 +1,4 @@
-# Scribe / FreelancerOS – Stand & offene Punkte
+# Coscribe / FreelancerOS – Stand & offene Punkte
 
 *Stand: Übersicht was fertig ist und was noch fehlt.*
 
