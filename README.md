@@ -1,6 +1,6 @@
-# Coscribe (cosrib)
+# cosrib
 
-**Coscribe** is a web product for **independent freelancers** who sell services—consulting, design, development, marketing, and similar work—and who want a **clearer workflow** for **cold outreach** and **follow-ups**, instead of juggling a generic chat, an inbox, and scattered notes with no single “finished” result.
+**cosrib** is a web product for **independent freelancers** who sell services—consulting, design, development, marketing, and similar work—and who want a **clearer workflow** for **cold outreach** and **follow-ups**, instead of juggling a generic chat, an inbox, and scattered notes with no single “finished” result.
 
 This **public repository** is here for **transparency**: what we are building and why. It does **not** include our application source code. Development happens in **private** repositories.
 
